@@ -126,6 +126,16 @@ Modelos simples como médias móveis e `naive` foram utilizados como benchmarks.
 
 Essa tabela compara o desempenho de diferentes modelos de previsão de temperatura nas últimas 24 horas, com base no erro médio absoluto (MAE). O modelo LSTM apresentou o melhor desempenho, seguido por AutoARIMA, enquanto abordagens mais simples como médias móveis (WindowAverage) e métodos ingênuos (Naive) tiveram erros maiores. Modelos com variáveis exógenas nem sempre melhoraram os resultados, destacando a complexidade adicional sem ganho claro em precisão.
 
+**Gráfico 4.1 — Previsão de temperatura com LSTM**  
+![image](https://github.com/user-attachments/assets/03795163-be2e-41a4-a9dc-902a7ea514a7)
+
+O gráfico mostra como o modelo LSTM (linha laranja tracejada) conseguiu prever a temperatura nas últimas 24 horas com base em dados anteriores. A linha azul representa os valores reais, e vemos que o modelo conseguiu acompanhar bem os picos e quedas da temperatura — mostrando que ele aprendeu o padrão da série temporal.
+
+**Gráfico 4.2 — Curva de Oerda do Modelo LSTM** 
+![image](https://github.com/user-attachments/assets/f82ed2e1-b6b1-4805-98e6-aed463aef040)
+
+Este gráfico mostra o erro do modelo durante o treinamento. A linha azul representa o erro nos dados de treino, e a laranja nos dados de validação. Ambas as curvas estão caindo, o que indica que o modelo está aprendendo e não está tendo overfitt. Desta maneira o  modelo LSTM aprendeu bem a prever a temperatura, com um erro baixo e comportamento estável durante o treino.  
+
 
 ### 5. Conclusão
 
