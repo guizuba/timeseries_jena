@@ -61,35 +61,23 @@ Valores como `-9999.0` foram identificados em variáveis como `wv` e `max. wv`, 
 
 #### 3.2 Estatísticas Descritivas
 
-- Temperatura média: 9.44 °C
-- Pressão média: 989 mbar (±8.3)
-- Variáveis `T`, `Tpot`, `p`, `rho` seguem distribuição normal
-- Outras, como `VPact`, `sh`, `max. wv`, têm cauda longa à direita
-- `wd` tem distribuição bimodal
+O conjunto de dados apresenta temperatura média de 9,44 °C, com ampla variação entre –22,65 °C e 37,04 °C. Variáveis como pressão, densidade do ar e temperatura potencial seguem distribuições aproximadamente normais, tornando-se adequadas para modelos lineares. Em contraste, variáveis como concentração de vapor e velocidade do vento exibem distribuições assimétricas à direita, podendo exigir transformações logarítmicas. A direção do vento apresenta distribuição bimodal, e a umidade relativa concentra-se entre 60% e 100%, com cauda inferior mais longa.
+
 
 📊 **Gráfico 2 — Distribuições das Variáveis**  
 ![Gráfico 2](https://github.com/user-attachments/assets/70d58186-e2f2-43bc-bd4b-1470ac95932f)
 
 #### 3.3 Correlação e DTW
 
-- `T` correlaciona fortemente com `Tpot`, `sh`, `VPmax`, `H2OC`
-- Correlação negativa com `rho` (-0.96) e `rh` (-0.57)
-- DTW foi aplicado para medir similaridade temporal entre variáveis com lags
+Em séries temporais, as variáveis podem parecer não correlacionadas em uma análise estática (como correlação de Pearson), mas ainda assim estarem sincronizadas em padrões temporais, com lags, compressões ou dilatações no tempo.O Dynamic Time Warping (DTW) resolve isso, permitindo medir a similaridade temporal não linear entre duas séries
 
 📉 **Gráfico 3 — Clusterização DTW (Dendograma)**  
 ![Gráfico 3](https://github.com/user-attachments/assets/138252d0-a19a-449d-a572-f80adbcbfd4e)
 
+O dendrograma mostra como variáveis com comportamentos temporais semelhantes (via DTW) podem ser agrupadas. Desta maneira podemos identificar variáveis redundantes (como VPact, VPdef, H2OC…)
+A selecionar variáveis representativas de clusters para reduzir dimensionalidade sem perder informação relevante
+
 #### 3.4 Seleção de Variáveis
-
-A partir da análise de correlação e DTW, foram escolhidas:
-
-- `p (mbar)`
-- `Tpot (K)`
-- `rh (%)`
-- `rho (g/m³)`
-- `wd (deg)`
-
-A variável alvo foi `T (°C)`.
 
 **Tabela — Correlação de Pearson**
 
@@ -103,6 +91,8 @@ A variável alvo foi `T (°C)`.
 | T (°C)         | -0.080   | 0.996    | -0.601  | -0.960      | -0.015   | 1.000   |
 
 ---
+
+Mesmo que o DTW e o dendrograma mostrem variáveis com comportamentos temporais parecidos, ainda é necessário analisar a matriz de correlação para evitar colinearidade. Variáveis como Tpot (K) e T (°C) têm correlação de 0.996 — ou seja, carregam praticamente a mesma informação. Se usadas juntas num modelo, isso pode causar distorções nas estimativas. Por isso, DTW ajuda a entender padrões temporais, mas a correlação é essencial para garantir variáveis independentes entre si.
 
 ### 4. Modelagem e Avaliação
 
@@ -134,18 +124,10 @@ Modelos simples como médias móveis e `naive` foram utilizados como benchmarks.
 
 ---
 
-### 5. Discussão
+Essa tabela compara o desempenho de diferentes modelos de previsão de temperatura nas últimas 24 horas, com base no erro médio absoluto (MAE). O modelo LSTM apresentou o melhor desempenho, seguido por AutoARIMA, enquanto abordagens mais simples como médias móveis (WindowAverage) e métodos ingênuos (Naive) tiveram erros maiores. Modelos com variáveis exógenas nem sempre melhoraram os resultados, destacando a complexidade adicional sem ganho claro em precisão.
 
-As estratégias de seleção de histórico influenciam diretamente a performance:
 
-- **Histórico curto (7 dias)**: capta mudanças recentes, mas perde sazonalidade;
-- **Histórico longo (3 anos)**: favorece a sazonalidade, mas pode causar overfitting.
-
-Modelos como LSTM apresentaram excelente desempenho, superando abordagens estatísticas clássicas.
-
----
-
-### 6. Conclusão
+### 5. Conclusão
 
 O modelo **Prophet** com variáveis selecionadas via **clusterização DTW** apresentou o melhor equilíbrio entre acurácia, interpretação e simplicidade. O **LSTM**, apesar de mais complexo, foi o mais preciso. A escolha depende da aplicação prática e da necessidade de interpretabilidade.
 
