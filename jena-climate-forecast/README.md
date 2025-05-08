@@ -139,7 +139,7 @@ Este gráfico mostra o erro do modelo durante o treinamento. A linha azul repres
 
 ### 5. Conclusão
 
-O modelo **Prophet** com variáveis selecionadas via **clusterização DTW** apresentou o melhor equilíbrio entre acurácia, interpretação e simplicidade. O **LSTM**, apesar de mais complexo, foi o mais preciso. A escolha depende da aplicação prática e da necessidade de interpretabilidade.
+O modelo **AutoArima** apresentou o melhor equilíbrio entre acurácia, interpretação e simplicidade. O **LSTM**, apesar de mais complexo, foi o mais preciso. A escolha depende da aplicação prática e da necessidade de interpretabilidade.
 
 #### Melhorias Futuras:
 
